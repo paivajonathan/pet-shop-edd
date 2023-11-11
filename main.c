@@ -26,7 +26,7 @@ typedef struct Fila {
 
 Fila* entrada = NULL;
 Fila* saida = NULL;
-Animal servicos_andamento[3];
+Animal servicos_andamento[MAXIMO_ANDAMENTO];
 int quantidade_andamento = 0;
 int contador_cadastro = 1;
 
@@ -99,8 +99,8 @@ void copiar_animal(Animal* origem, Animal* destino)
 {
     destino->id = origem->id;
     strcpy(destino->nome, origem->nome);
-    strcpy(destino->especie, origem->especie);
     strcpy(destino->tutor, origem->tutor);
+    destino->especie = origem->especie;
     destino->servico = origem->servico;
     destino->status = origem->status;
 }
