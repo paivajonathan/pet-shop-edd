@@ -68,6 +68,7 @@ Animal receber_dados(void)
         printf("Serviço inválido!\n");
         printf("Digite o serviço desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
         scanf("%d", &animal.servico);
+        getchar();
     }
 
     animal.id = contador_cadastro++;
@@ -255,7 +256,6 @@ int remover_servico_andamento(int id)
     for (int i = posicao; i < quantidade_andamento; i++) 
         copiar_animal(&servicos_andamento[i + 1], &servicos_andamento[i]);
 
-    aguardar_usuario();
     return 1;
 }
 
@@ -306,6 +306,7 @@ void finalizar_servico(void)
 
     printf("Digite o id do animal:\n");
     scanf("%d", &id);
+    getchar();
 
     posicao = buscar_servico_andamento(id);
     
@@ -333,6 +334,7 @@ void cancelar_servico(void) {
 
     printf("Digite o id do animal:\n");
     scanf("%d", &id);
+    getchar();
 
     // Somente cancela se o serviço não estiver finalizado
     if (!remover_entrada_fila(&entrada, id)) {
