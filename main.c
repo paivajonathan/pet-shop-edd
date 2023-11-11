@@ -32,7 +32,8 @@ int contador_cadastro = 1;
 
 /* ==================== COMEÇO FUNÇÕES UTILITÁRIAS ==================== */
 
-void aguardar_usuario(void) {
+void aguardar_usuario(void) 
+{
     printf("Pressione ENTER para continuar...\n");
     getchar();
 }
@@ -42,7 +43,8 @@ void aguardar_usuario(void) {
 
 /* ==================== COMEÇO FUNÇÕES DE ANIMAL ==================== */
 
-Animal receber_dados(void) {
+Animal receber_dados(void) 
+{
     Animal animal;
 
     printf("Digite o nome do animal:\n");
@@ -61,7 +63,8 @@ Animal receber_dados(void) {
     scanf("%d", &animal.servico);
     getchar();
 
-    while(animal.servico < 1 || animal.servico > 3) {
+    while(animal.servico < 1 || animal.servico > 3) 
+    {
         printf("Serviço inválido!\n");
         printf("Digite o serviço desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
         scanf("%d", &animal.servico);
@@ -73,7 +76,8 @@ Animal receber_dados(void) {
     return animal;
 }
 
-void printar_animal(Animal animal) {
+void printar_animal(Animal animal) 
+{
     printf("\nId: %d\n", animal.id);
     printf("Nome: %s\n", animal.nome);
     printf("Espécie: %s\n", animal.especie);
@@ -82,7 +86,8 @@ void printar_animal(Animal animal) {
     printf("Status: %d\n\n", animal.status);
 }
 
-void copiar_animal(Animal origem, Animal destino) {
+void copiar_animal(Animal origem, Animal destino) 
+{
     destino.id = origem.id;
     strcpy(destino.nome, origem.nome);
     strcpy(destino.especie, origem.especie);
@@ -96,27 +101,29 @@ void copiar_animal(Animal origem, Animal destino) {
 
 /* ==================== COMEÇO DAS FUNÇÕES DE FILA ==================== */
 
-void enfileirar(Animal animal, Fila** fila) {
+void enfileirar(Animal animal, Fila** fila) 
+{
     Fila* novo = (Fila*) malloc(sizeof(Fila));
-    if (novo == NULL) {
+    if (novo == NULL) 
+    {
         printf("Erro ao alocar memória!\n");
         exit(1);
     }
     novo->animal = animal;
     novo->prox = NULL;
 
-    if (*fila == NULL) {
-        *fila = novo;
-    } else {
+    if (*fila == NULL) *fila = novo;
+    else 
+    {
         Fila* aux = *fila;
-        while (aux->prox != NULL) {
+        while (aux->prox != NULL)
             aux = aux->prox;
-        }
         aux->prox = novo;
     }
 }
 
-void desenfileirar(Fila** fila) {
+void desenfileirar(Fila** fila) 
+{
     if (*fila == NULL) return;
 
     Fila* aux = *fila;
@@ -125,11 +132,39 @@ void desenfileirar(Fila** fila) {
     aux = NULL;
 }
 
-void limpar_fila(Fila** fila) {
+int remover_entrada_fila(Fila** fila, int id) 
+{
+    if (*fila == NULL) return 0;
+
+    Fila* atual = *fila;
+    Fila* anterior = NULL;
+
+    while (atual != NULL && atual->animal.id != id) 
+    {
+        anterior = atual;
+        atual = atual->prox;
+    }
+
+    if (atual == NULL) return 0; // caso o elemento não seja encontrado
+
+    if (anterior == NULL) // caso o elemento a ser removido seja o primeiro
+        *fila = atual->prox;
+    else
+        anterior->prox = atual->prox;
+
+    free(atual);
+    atual = NULL;
+
+    return 1;
+}
+
+void limpar_fila(Fila** fila) 
+{
     if (*fila == NULL) return;
 
     Fila* aux;
-    while (*fila != NULL) {
+    while (*fila != NULL) 
+    {
         aux = *fila;
         *fila = (*fila)->prox;
         free(aux);
@@ -137,8 +172,10 @@ void limpar_fila(Fila** fila) {
     }
 }
 
-void printar_fila(Fila** fila) {
-    if (*fila == NULL) {
+void printar_fila(Fila** fila) 
+{
+    if (*fila == NULL) 
+    {
         printf("Fila vazia!\n");
         aguardar_usuario();
         return;
@@ -146,7 +183,8 @@ void printar_fila(Fila** fila) {
 
     Fila* aux = *fila;
     
-    while (aux != NULL) {
+    while (aux != NULL) 
+    {
         printar_animal(aux->animal);
         aux = aux->prox;
     }
@@ -159,16 +197,28 @@ void printar_fila(Fila** fila) {
 
 /* ==================== COMEÇO DAS FUNÇÕES DE ARRAY ==================== */
 
-void printar_servicos_andamento() {
-    for (int i = 0; i < quantidade_andamento; i++) {
-        printar_animal(servicos_andamento[i]);
+void printar_servicos_andamento(void) 
+{
+    if (quantidade_andamento == 0) 
+    {
+        printf("Nenhum serviço em andamento!\n");
+        aguardar_usuario();
+        return;
     }
+
+    for (int i = 0; i < quantidade_andamento; i++) 
+        printar_animal(servicos_andamento[i]);
+    
+    aguardar_usuario();
 }
 
-int buscar_servico_andamento(int id) {
+int buscar_servico_andamento(int id) 
+{
     int posicao = -1;
-    for (int i = 0; i < quantidade_andamento; i++) {
-        if (servicos_andamento[i].id == id) {
+    for (int i = 0; i < quantidade_andamento; i++) 
+    {
+        if (servicos_andamento[i].id == id) 
+        {
             posicao = i;
             break;
         }
@@ -176,8 +226,10 @@ int buscar_servico_andamento(int id) {
     return posicao;
 }
 
-int adicionar_servico_andamento(Animal animal) {
-    if (quantidade_andamento == MAXIMO_ANDAMENTO) {
+int adicionar_servico_andamento(Animal animal) 
+{
+    if (quantidade_andamento == MAXIMO_ANDAMENTO) 
+    {
         printf("Limite de serviços em servicos_andamento atingido!\n");
         return 0;
     }
@@ -186,16 +238,18 @@ int adicionar_servico_andamento(Animal animal) {
     return 1;
 }
 
-void remover_servico_andamento(int id) {
-    if (quantidade_andamento == 0) return;
+int remover_servico_andamento(int id) 
+{
+    if (quantidade_andamento == 0) return 0;
 
     int posicao = buscar_servico_andamento(id);
-    if (posicao == -1) return;
+    if (posicao == -1) return 0;
 
     quantidade_andamento--;
-    for (int i = posicao; i < quantidade_andamento; i++) {
+    for (int i = posicao; i < quantidade_andamento; i++) 
         copiar_animal(servicos_andamento[i + 1], servicos_andamento[i]);
-    }
+
+    return 1;
 }
 
 /* ==================== FIM DAS FUNÇÕES DE ARRAY ==================== */
@@ -203,9 +257,8 @@ void remover_servico_andamento(int id) {
 
 /* ==================== COMEÇO DAS FUNÇÕES DO PETSHOP ==================== */
 
-void cadastrar_animal(void) {
-    system(CLEAR);
-
+void cadastrar_animal(void) 
+{
     Animal animal = receber_dados();
     enfileirar(animal, &entrada);
 
@@ -213,8 +266,10 @@ void cadastrar_animal(void) {
     aguardar_usuario();
 }
 
-void atender_animal(void) {
-    if (entrada == NULL) {
+void atender_animal(void) 
+{
+    if (entrada == NULL) 
+    {
         printf("Fila de entrada vazia!\n");
         aguardar_usuario();
         return;
@@ -225,9 +280,13 @@ void atender_animal(void) {
 
     if (!adicionar_servico_andamento(animal)) return;
     desenfileirar(&entrada);
+
+    printf("Atendendo seguinte animal:\n");
+    printar_animal(animal);
 }
 
-void finalizar_servico() {
+void finalizar_servico(void) 
+{
     int id, posicao;
 
     printf("Digite o id do animal:\n");
@@ -235,7 +294,8 @@ void finalizar_servico() {
 
     posicao = buscar_servico_andamento(id);
     
-    if (posicao == -1) {
+    if (posicao == -1) 
+    {
         printf("Serviço em andamento não encontrado!\n");
         return;
     }
@@ -245,16 +305,41 @@ void finalizar_servico() {
 
     enfileirar(animal, &saida);
     remover_servico_andamento(id);
+
+    printf("Finalizando serviço:\n");
+    printar_animal(animal);
 }
 
-void entregar_animal() {
-    if (saida == NULL) {
+void cancelar_servico(void) {
+    int id;
+
+    printf("Digite o id do animal:\n");
+    scanf("%d", &id);
+
+    // Somente cancela se o serviço não estiver finalizado
+    if (!remover_entrada_fila(&entrada, id)) {
+        if (!remover_servico_andamento(id)) {
+            printf("Serviço não encontrado!\n");
+            return;
+        }
+    }
+
+    printf("Serviço cancelado com sucesso!\n");
+}
+
+void entregar_animal(void) 
+{
+    if (saida == NULL) 
+    {
         printf("Fila de saída vazia!\n");
         return;
     }
 
     Animal animal = saida->animal;
     desenfileirar(&saida);
+
+    printf("Entregando seguinte animal:\n");
+    printar_animal(animal);
 }
 
 /* ==================== FIM DAS FUNÇÕES DO PETSHOP ==================== */
@@ -287,33 +372,33 @@ void entregar_animal() {
 
 // o alocamento deve ser feito por estrutura ou de duas em duas estruturas
 
-void mostrar_menu(void) {
-    system(CLEAR);
+void mostrar_menu(void) 
+{
     printf("Digite a opção desejada:\n");
     printf("1 - Cadastrar animal\n");
     printf("2 - Atender animal\n");
     printf("3 - Finalizar serviço\n");
-    printf("4 - Entregar animal\n");
-    printf("5 - Imprimir fila de entrada\n");
-    printf("6 - Imprimir fila de saída\n");
-    printf("7 - Imprimir serviços em andamento\n");
+    printf("4 - Cancelar serviço\n");
+    printf("5 - Entregar animal\n");
+    printf("6 - Imprimir fila de entrada\n");
+    printf("7 - Imprimir fila de saída\n");
+    printf("8 - Imprimir serviços em andamento\n");
     printf("0 - Sair\n");
 }
 
-int main(void) {
+int main(void) 
+{
     int opcao = -1;
 
-    do {
+    do 
+    {
         mostrar_menu();
-        
-        printf("Endereço que está na fila de entrada: %p\n", entrada);
-        printar_servicos_andamento();
-        printf("Endereço que está na fila de saída: %p\n", saida);
-        
+
         scanf("%d", &opcao);
         getchar();
 
-        switch(opcao) {
+        switch (opcao) 
+        {
             case 1:
                 cadastrar_animal();
                 break;
@@ -324,15 +409,18 @@ int main(void) {
                 finalizar_servico();
                 break;
             case 4:
-                entregar_animal();
+                cancelar_servico();
                 break;
             case 5:
-                printar_fila(&entrada);
+                entregar_animal();
                 break;
             case 6:
-                printar_fila(&saida);
+                printar_fila(&entrada);
                 break;
             case 7:
+                printar_fila(&saida);
+                break;
+            case 8:
                 printar_servicos_andamento();
                 break;
             case 0:
@@ -342,7 +430,6 @@ int main(void) {
                 printf("Opção inválida!\n");
                 break;
         }
-
     } while (opcao != 0);
 
     limpar_fila(&entrada);
