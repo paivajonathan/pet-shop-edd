@@ -8,6 +8,18 @@
     #define CLEAR "clear"
 #endif
 
+#define AGUARDANDO 1
+#define ANDAMENTO 2
+#define FINALIZADO 3
+
+#define CACHORRO 1
+#define GATO 2
+#define OUTRO_ANIMAL 3
+
+#define BANHO 1
+#define TOSA 2
+#define BANHO_TOSA 3
+
 #define MAXIMO_ANDAMENTO 3
 
 typedef struct Animal {
@@ -55,14 +67,14 @@ Animal receber_dados(void)
     scanf("%[^\n]s", animal.tutor);
     getchar();
 
-    printf("Digite a espécie do animal:\n");
+    printf("Digite a espécie do animal:\n1 - Cachorro\n2 - Gato\n3 - Outro\n");
     scanf("%d", &animal.especie);
     getchar();
 
-    while (animal.especie < 1 || animal.especie > 3) 
+    while (animal.especie < CACHORRO || animal.especie > OUTRO_ANIMAL) 
     {
         printf("Espécie inválida!\n");
-        printf("Digite a espécie do animal:\n");
+        printf("Digite a espécie do animal:\n1 - Cachorro\n2 - Gato\n3 - Outro\n");
         scanf("%d", &animal.especie);
         getchar();
     }
@@ -71,7 +83,7 @@ Animal receber_dados(void)
     scanf("%d", &animal.servico);
     getchar();
 
-    while(animal.servico < 1 || animal.servico > 3) 
+    while(animal.servico < BANHO || animal.servico > BANHO_TOSA) 
     {
         printf("Serviço inválido!\n");
         printf("Digite o serviço desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
@@ -80,7 +92,7 @@ Animal receber_dados(void)
     }
 
     animal.id = contador_cadastro++;
-    animal.status = 1;
+    animal.status = AGUARDANDO;
 
     return animal;
 }
@@ -245,12 +257,7 @@ int adicionar_em_array(Animal animal)
 
 int remover_de_array(int id) 
 {
-    if (quantidade_andamento == 0) 
-    {
-        printf("Nenhum serviço em andamento!\n");
-        aguardar_usuario();
-        return 0;
-    }
+    if (quantidade_andamento == 0) return 0;
 
     int posicao = buscar_em_array(id);
     if (posicao == -1) return 0;
@@ -295,7 +302,7 @@ void atender_animal(void)
     }
     
     Animal animal = entrada->animal;
-    animal.status = 2;  // em andamento
+    animal.status = ANDAMENTO;
 
     if (!adicionar_em_array(animal))
     {
@@ -331,7 +338,7 @@ void finalizar_servico(void)
     scanf("%d", &novo_status);
     getchar();
 
-    while (novo_status < 2 || novo_status > 3) 
+    while (novo_status < ANDAMENTO || novo_status > FINALIZADO) 
     {
         printf("Status inválido!\n");
         printf("Para qual status deseja alterar?\n2 - Em andamento\n3 - Finalizado\n");
@@ -339,7 +346,7 @@ void finalizar_servico(void)
         getchar();
     }
 
-    if (novo_status == 2) 
+    if (novo_status == ANDAMENTO) 
     {
         printf("Serviço permanece em andamento.\n");
         aguardar_usuario();
@@ -347,7 +354,7 @@ void finalizar_servico(void)
     }
 
     Animal animal = servicos_andamento[posicao];
-    animal.status = novo_status;  // finalizado
+    animal.status = FINALIZADO;  // finalizado
 
     if (!enfileirar(animal, &saida))
     {
@@ -370,18 +377,18 @@ void cancelar_servico(void) {
     scanf("%d", &id);
     getchar();
 
-    printf("Digite o status atual do servico:\n");
+    printf("Digite o status atual do servico:\n1 - Aguardando\n2 - Em andamento\n");
     scanf("%d", &status_atual);
     getchar();
 
-    while (status_atual < 1 || status_atual > 2) {
+    while (status_atual < AGUARDANDO || status_atual > ANDAMENTO) {
         printf("Status inválido!\n");
-        printf("Digite o status atual do servico:\n");
+        printf("Digite o status atual do servico:\n1 - Aguardando\n2 - Em andamento\n");
         scanf("%d", &status_atual);
         getchar();
     }
 
-    if (status_atual == 1) // caso o serviço esteja na fila de entrada
+    if (status_atual == AGUARDANDO) // caso o serviço esteja na fila de entrada
     {
         if (!remover_de_fila(&entrada, id)) 
         {
@@ -390,7 +397,7 @@ void cancelar_servico(void) {
             return;
         }
     }
-    else if (status_atual == 2) // caso o serviço esteja em andamento
+    else if (status_atual == ANDAMENTO) // caso o serviço esteja em andamento
     {
         if (!remover_de_array(id)) 
         {
