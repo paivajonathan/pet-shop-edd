@@ -108,7 +108,7 @@ void printar_animal(Animal animal)
     printf("Status: %d\n\n", animal.status);
 }
 
-void copiar_animal(Animal* origem, Animal* destino) 
+void copiar_animal(Animal* destino, Animal* origem) 
 {
     destino->id = origem->id;
     strcpy(destino->nome, origem->nome);
@@ -265,7 +265,7 @@ int remover_de_array(int id)
 
     quantidade_andamento--;
     for (int i = posicao; i < quantidade_andamento; i++) 
-        copiar_animal(&servicos_andamento[i + 1], &servicos_andamento[i]);
+        copiar_animal(&servicos_andamento[i], &servicos_andamento[i + 1]);
 
     return 1;
 }
