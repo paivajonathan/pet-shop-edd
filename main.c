@@ -199,15 +199,25 @@ void desenfileirar(Fila** fila)
     aux = NULL;
 }
 
+Fila* buscar_item_fila(Fila** fila, int id) 
+{
+    if (*fila == NULL) return NULL;
+
+    Fila* atual = *fila;
+    while (atual != NULL && atual->animal.id != id)
+        atual = atual->prox;
+
+    return atual;
+}
+
 /**
  * Remove um elemento da fila com base no id do animal.
  * @param fila qual das filas será removido o elemento.
  * @param id identificador do animal.
- * @return 1 se o animal foi removido com sucesso, 0 caso contrário.
 */
-int remover_de_fila(Fila** fila, int id) 
+void remover_de_fila(Fila** fila, int id) 
 {
-    if (*fila == NULL) return 0;
+    if (*fila == NULL) return;
 
     Fila* atual = *fila;
     Fila* anterior = NULL;
@@ -218,7 +228,7 @@ int remover_de_fila(Fila** fila, int id)
         atual = atual->prox;
     }
 
-    if (atual == NULL) return 0; // caso o elemento não seja encontrado
+    if (atual == NULL) return; // caso o elemento não seja encontrado
 
     if (anterior == NULL) // caso o elemento a ser removido seja o primeiro
         *fila = atual->prox;
@@ -227,8 +237,6 @@ int remover_de_fila(Fila** fila, int id)
 
     free(atual);
     atual = NULL;
-
-    return 1;
 }
 
 /**
@@ -332,21 +340,16 @@ int adicionar_em_array(Animal animal)
 
 /**
  * Remove um animal da array de serviços em andamento.
- * @param id identificador do animal.
- * @return 1 se o animal foi removido com sucesso, 0 caso contrário.
+ * @param posicao posição do animal na array de serviços em andamento.
 */
-int remover_de_array(int id) 
+void remover_de_array(int posicao) 
 {
-    if (quantidade_andamento == 0) return 0;
-
-    int posicao = buscar_em_array(id);
-    if (posicao == -1) return 0;
+    if (quantidade_andamento == 0) return;
+    if (posicao == -1) return;
 
     quantidade_andamento--;
     for (int i = posicao; i < quantidade_andamento; i++) 
         copiar_animal(&servicos_andamento[i], &servicos_andamento[i + 1]);
-
-    return 1;
 }
 
 /* ==================== FIM DAS FUNÇÕES DE ARRAY ==================== */
@@ -410,7 +413,7 @@ void atender_animal(void)
  * 
  * Busca o animal na array de serviços em andamento, com base no id recebido do usuário,
  * e então copia seus dados para uma nova estrutura, alterando seu status para "finalizado".
- * Em seguida, adiciona o animal na fila de saída, e remove o animal da array de serviços em andamento.
+ * Em seguida, adiciona essa estrutura na fila de saída, e remove o animal da array de serviços em andamento.
  * O processo ocorre nessa ordem, para evitar que os dados do animal sejam perdidos,
  * caso ocorra algum erro.
 */
@@ -422,7 +425,7 @@ void alterar_status_servico(void)
     scanf("%d", &id);
     limpar_buffer();
 
-    while (id < MINIMO_ID || id > contador_id) // validar id
+    while (id < MINIMO_ID || id > contador_id - 1) // validar id
     {
         printf("\nId invalido!\n");
         printf("Digite o id do animal para alterar o status do servico:\n");
@@ -447,7 +450,7 @@ void alterar_status_servico(void)
         aguardar_usuario();
         return;
     } 
-    remover_de_array(id);
+    remover_de_array(posicao);
 
     printf("\nFinalizando servico:\n");
     printar_animal(animal);
@@ -462,18 +465,7 @@ void alterar_status_servico(void)
 */
 void cancelar_servico(void) {
     int id, status_atual;
-
-    printf("\nDigite o id do animal:\n");
-    scanf("%d", &id);
-    limpar_buffer();
-
-    while (id < MINIMO_ID || id > contador_id) // caso o id seja inválido
-    {
-        printf("\nId invalido!\n");
-        printf("Digite o id do animal:\n");
-        scanf("%d", &id);
-        limpar_buffer();
-    }
+    Animal animal;
 
     printf("\nDigite o status atual do servico:\n1 - Aguardando\n2 - Em andamento\n");
     scanf("%d", &status_atual);
@@ -487,26 +479,45 @@ void cancelar_servico(void) {
         limpar_buffer();
     }
 
+    printf("\nDigite o id do animal:\n");
+    scanf("%d", &id);
+    limpar_buffer();
+
+    while (id < MINIMO_ID || id > contador_id - 1) // caso o id seja inválido
+    {
+        printf("\nId invalido!\n");
+        printf("Digite o id do animal:\n");
+        scanf("%d", &id);
+        limpar_buffer();
+    }
+
     if (status_atual == AGUARDANDO) // caso o serviço esteja na fila de entrada
     {
-        if (!remover_de_fila(&entrada, id)) 
+        Fila* aux = buscar_item_fila(&entrada, id);
+        if (aux == NULL) 
         {
             printf("\nAnimal nao encontrado aguardando!\n");
             aguardar_usuario();
             return;
         }
+        animal = aux->animal;
+        remover_de_fila(&entrada, id);
     }
-    else if (status_atual == ANDAMENTO) // caso o serviço esteja em andamento
+    else if (status_atual == ANDAMENTO) // caso o serviço esteja na array de andamento
     {
-        if (!remover_de_array(id)) 
+        int posicao = buscar_em_array(id);
+        if (posicao == -1)
         {
             printf("\nServico em andamento nao encontrado!\n");
             aguardar_usuario();
             return;
         }
+        animal = servicos_andamento[posicao];
+        remover_de_array(posicao);
     }
 
     printf("\nServico cancelado com sucesso!\n");
+    printar_animal(animal);
     aguardar_usuario();
 }
 
