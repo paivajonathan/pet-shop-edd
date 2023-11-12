@@ -2,12 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef _WIN32
-#define CLEAR "cls"
-#else
-#define CLEAR "clear"
-#endif
-
 #define AGUARDANDO 1
 #define ANDAMENTO 2
 #define FINALIZADO 3
