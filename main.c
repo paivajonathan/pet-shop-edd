@@ -51,7 +51,8 @@ void aguardar_usuario(void)
 /**
  * Limpa o buffer do teclado.
 */
-void limpar_buffer(void) {
+void limpar_buffer(void)
+{
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
