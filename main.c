@@ -46,7 +46,7 @@ int contador_id = MINIMO_ID;
 /* ==================== COMEÇO FUNÇÕES UTILITÁRIAS ==================== */
 
 /**
- * Aguarda o usuário pressionar ENTER para continuar.
+ * Aguarda a confirmação do usuário para continuar o programa.
 */
 void aguardar_usuario(void) 
 {
@@ -54,11 +54,34 @@ void aguardar_usuario(void)
     getchar();
 }
 
+/**
+ * Exibe no console o menu de opções.
+*/
+void mostrar_menu(void) 
+{
+    system(CLEAR);
+    printf("Digite a opcao desejada:\n");
+    printf("1 - Cadastrar animal\n");
+    printf("2 - Atender animal\n");
+    printf("3 - Alterar status de servico\n");
+    printf("4 - Cancelar servico\n");
+    printf("5 - Entregar animal\n");
+    printf("6 - Imprimir fila de entrada\n");
+    printf("7 - Imprimir servicos em andamento\n");
+    printf("8 - Imprimir fila de saida\n");
+    printf("0 - Sair\n");
+}
+
 /* ==================== FIM FUNÇÕES UTILITÁRIAS ==================== */
 
 
 /* ==================== COMEÇO FUNÇÕES DE ANIMAL ==================== */
 
+/**
+ * Recebe os dados pertinentes, realizando as devidas validações, para
+ * criar uma nova estrutura de Animal.
+ * @return novo animal com os dados preenchidos.
+*/
 Animal receber_dados(void) 
 {
     Animal animal;
@@ -101,6 +124,10 @@ Animal receber_dados(void)
     return animal;
 }
 
+/**
+ * Exibe no console os dados de um animal.
+ * @param animal animal que terá os dados exibidos.
+*/
 void printar_animal(Animal animal) 
 {
     printf("\nId: %d\n", animal.id);
@@ -111,6 +138,11 @@ void printar_animal(Animal animal)
     printf("Status: %d\n\n", animal.status);
 }
 
+/**
+ * Copia os dados de um animal para outro.
+ * @param destino animal que receberá os dados.
+ * @param origem animal que será copiado.
+*/
 void copiar_animal(Animal* destino, const Animal* origem) 
 {
     destino->id = origem->id;
@@ -126,6 +158,12 @@ void copiar_animal(Animal* destino, const Animal* origem)
 
 /* ==================== COMEÇO DAS FUNÇÕES DE FILA ==================== */
 
+/**
+ * Insere um novo elemento no final da fila.
+ * @param animal dados do animal a serem inseridos
+ * @param fila qual das filas será inserido o novo elemento
+ * @return 1 se o animal foi inserido com sucesso, 0 caso contrário.
+*/
 int enfileirar(Animal animal, Fila** fila)
 {
     Fila* novo = (Fila*) malloc(sizeof(Fila));
@@ -145,6 +183,10 @@ int enfileirar(Animal animal, Fila** fila)
     return 1;
 }
 
+/**
+ * Remove o primeiro elemento da fila.
+ * @param fila qual das filas será removido o elemento.
+*/
 void desenfileirar(Fila** fila) 
 {
     if (*fila == NULL) return;
@@ -155,6 +197,12 @@ void desenfileirar(Fila** fila)
     aux = NULL;
 }
 
+/**
+ * Remove um elemento da fila com base no id do animal.
+ * @param fila qual das filas será removido o elemento.
+ * @param id identificador do animal.
+ * @return 1 se o animal foi removido com sucesso, 0 caso contrário.
+*/
 int remover_de_fila(Fila** fila, int id) 
 {
     if (*fila == NULL) return 0;
@@ -181,6 +229,10 @@ int remover_de_fila(Fila** fila, int id)
     return 1;
 }
 
+/**
+ * Remove todos os elementos da fila, liberando a memória alocada.
+ * @param fila qual das filas será realizado esse processo.
+*/
 void limpar_fila(Fila** fila) 
 {
     if (*fila == NULL) return;
@@ -195,6 +247,10 @@ void limpar_fila(Fila** fila)
     }
 }
 
+/**
+ * Exibe no console os dados de todos os animais da fila.
+ * @param fila qual das filas serão exibidos os dados.
+*/
 void printar_fila(Fila** fila) 
 {
     if (*fila == NULL) 
@@ -220,6 +276,9 @@ void printar_fila(Fila** fila)
 
 /* ==================== COMEÇO DAS FUNÇÕES DE ARRAY ==================== */
 
+/**
+ * Exibe no console os dados de todos os animais da array de serviços em andamento.
+*/
 void printar_array(void) 
 {
     system(CLEAR);
@@ -238,6 +297,11 @@ void printar_array(void)
     aguardar_usuario();
 }
 
+/**
+ * Busca o índice de um animal na array de serviços em andamento, com base no seu id.
+ * @param id identificador do animal.
+ * @return índice do animal na array, -1 caso não seja encontrado.
+*/
 int buscar_em_array(int id) 
 {
     int posicao = -1;
@@ -252,6 +316,11 @@ int buscar_em_array(int id)
     return posicao;
 }
 
+/**
+ * Adiciona um animal na array de serviços em andamento.
+ * @param animal animal que será adicionado.
+ * @return 1 se o animal foi adicionado com sucesso, 0 caso contrário.
+*/
 int adicionar_em_array(Animal animal) 
 {
     if (quantidade_andamento == MAXIMO_ANDAMENTO) return 0;
@@ -260,6 +329,11 @@ int adicionar_em_array(Animal animal)
     return 1;
 }
 
+/**
+ * Remove um animal da array de serviços em andamento.
+ * @param id identificador do animal.
+ * @return 1 se o animal foi removido com sucesso, 0 caso contrário.
+*/
 int remover_de_array(int id) 
 {
     if (quantidade_andamento == 0) return 0;
@@ -279,6 +353,9 @@ int remover_de_array(int id)
 
 /* ==================== COMEÇO DAS FUNÇÕES DO PETSHOP ==================== */
 
+/**
+ * Cadastra um novo animal na fila de entrada, com base nos dados recebidos, caso possível.
+*/
 void cadastrar_animal(void) 
 {
     system(CLEAR);
@@ -295,6 +372,14 @@ void cadastrar_animal(void)
     aguardar_usuario();
 }
 
+/**
+ * @brief Atende um animal da fila de entrada, alterando seu status para "em andamento".
+ * 
+ * Copia os dados do primeiro animal da fila de entrada, para adicioná-lo na
+ * array de serviços em andamento, e então remove o primeiro da fila de entrada.
+ * O processo ocorre nessa ordem, para evitar que os dados do animal sejam perdidos,
+ * caso ocorra algum erro.
+*/
 void atender_animal(void) 
 {
     system(CLEAR);
@@ -322,6 +407,15 @@ void atender_animal(void)
     aguardar_usuario();
 }
 
+/**
+ * @brief Altera o status de um animal da array de serviços em andamento para "finalizado".
+ * 
+ * Busca o animal na array de serviços em andamento, com base no id recebido do usuário,
+ * e então copia seus dados para uma nova estrutura, alterando seu status para "finalizado".
+ * Em seguida, adiciona o animal na fila de saída, e remove o animal da array de serviços em andamento.
+ * O processo ocorre nessa ordem, para evitar que os dados do animal sejam perdidos,
+ * caso ocorra algum erro.
+*/
 void alterar_status_servico(void) 
 {
     system(CLEAR);
@@ -363,6 +457,12 @@ void alterar_status_servico(void)
     aguardar_usuario();
 }
 
+/**
+ * @brief Cancela um serviço, removendo o animal da fila de entrada ou da array de serviços em andamento.
+ * 
+ * Recebe o id do animal e o status atual do serviço, para então remover o animal da fila de entrada ou da
+ * array de serviços em andamento, dependendo do status recebido.
+*/
 void cancelar_servico(void) {
     system(CLEAR);
     int id, status_atual;
@@ -414,6 +514,11 @@ void cancelar_servico(void) {
     aguardar_usuario();
 }
 
+/**
+ * @brief Entrega o animal para o tutor, removendo-o da fila de saída.
+ * 
+ * Remove o primeiro animal da fila de saída, exibindo seus dados no console.
+*/
 void entregar_animal(void) 
 {
     system(CLEAR);
@@ -435,47 +540,37 @@ void entregar_animal(void)
 /* ==================== FIM DAS FUNÇÕES DO PETSHOP ==================== */
 
 
-// entrada dos animais é uma fila por ordem de chegada
-// no cadastro entra na fila
-// banho tosa ou ambos, serviço definido na hora do cadastro
+/*
+    Instruções:
 
-// petshop não pode ter mais de três animais com status de em andamento
+    entrada dos animais é uma fila por ordem de chegada
+    no cadastro entra na fila
+    banho tosa ou ambos, serviço definido na hora do cadastro
 
-// assim que o status mudar para finalizado, o animal entra na *fila* de saída
-// duas filas - entrada, pro cadastro, outra fila pra saída
-// mudou o status, sai da fila de entrada e vai pra fila de saída
+    petshop não pode ter mais de três animais com status de em andamento
 
-// fila de saída pode ter uma ordenação diferente da fila de entrada
-// na fila de saída tem que ser na ordem que finalizou o serviço
-// inclusão automática
+    assim que o status mudar para finalizado, o animal entra na *fila* de saída
+    duas filas - entrada, pro cadastro, outra fila pra saída
+    mudou o status, sai da fila de entrada e vai pra fila de saída
 
-// talvez (coisa da cabeça do marcel):
-// fila de entrada, fila pra acompanhar quem está em andamento, fila de saída
-// aí poderia ter um terceiro status: aguardando (2)
+    fila de saída pode ter uma ordenação diferente da fila de entrada
+    na fila de saída tem que ser na ordem que finalizou o serviço
+    inclusão automática
 
-// código deve implementar uma função para cancelamento do serviço, somente se não tiver
-// status finalizado
-// caso for cancelado na entrada, deve ser retirado da entrada e reorganizada a estrutura
+    talvez (coisa da cabeça do marcel):
+    fila de entrada, fila pra acompanhar quem está em andamento, fila de saída
+    aí poderia ter um terceiro status: aguardando (2)
 
-// operaçao de entregar o animal, tira da fila de saída e reorganiza a estrutura
-// fila de entrada não tem tamanho, fila de saída não tem tamanho
+    código deve implementar uma função para cancelamento do serviço, somente se não tiver
+    status finalizado
+    caso for cancelado na entrada, deve ser retirado da entrada e reorganizada a estrutura
 
-// o alocamento deve ser feito por estrutura ou de duas em duas estruturas
+    operaçao de entregar o animal, tira da fila de saída e reorganiza a estrutura
+    fila de entrada não tem tamanho, fila de saída não tem tamanho
 
-void mostrar_menu(void) 
-{
-    system(CLEAR);
-    printf("Digite a opcao desejada:\n");
-    printf("1 - Cadastrar animal\n");
-    printf("2 - Atender animal\n");
-    printf("3 - Alterar status de servico\n");
-    printf("4 - Cancelar servico\n");
-    printf("5 - Entregar animal\n");
-    printf("6 - Imprimir fila de entrada\n");
-    printf("7 - Imprimir servicos em andamento\n");
-    printf("8 - Imprimir fila de saida\n");
-    printf("0 - Sair\n");
-}
+    o alocamento deve ser feito por estrutura ou de duas em duas estruturas
+*/
+
 
 int main(void) 
 {
