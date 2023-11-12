@@ -59,7 +59,6 @@ void aguardar_usuario(void)
 */
 void mostrar_menu(void) 
 {
-    system(CLEAR);
     printf("Digite a opcao desejada:\n");
     printf("1 - Cadastrar animal\n");
     printf("2 - Atender animal\n");
@@ -86,7 +85,7 @@ Animal receber_dados(void)
 {
     Animal animal;
 
-    printf("Digite o nome do animal:\n");
+    printf("\nDigite o nome do animal:\n");
     scanf("%[^\n]s", animal.nome);
     getchar();
 
@@ -130,7 +129,7 @@ Animal receber_dados(void)
 */
 void printar_animal(Animal animal) 
 {
-    printf("\nId: %d\n", animal.id);
+    printf("Id: %d\n", animal.id);
     printf("Nome: %s\n", animal.nome);
     printf("Tutor: %s\n", animal.tutor);
     printf("Especie: %d\n", animal.especie);
@@ -281,8 +280,7 @@ void printar_fila(Fila** fila)
 */
 void printar_array(void) 
 {
-    system(CLEAR);
-    printf(">>> Servicos em andamento <<<\n\n");
+    printf("\n>>> Servicos em andamento <<<\n\n");
     
     if (quantidade_andamento == 0) 
     {
@@ -358,12 +356,11 @@ int remover_de_array(int id)
 */
 void cadastrar_animal(void) 
 {
-    system(CLEAR);
     Animal animal = receber_dados();
 
     if (!enfileirar(animal, &entrada))
     {
-        printf("Nao foi possivel cadastrar o animal!\n");
+        printf("\nNao foi possivel cadastrar o animal!\n");
         aguardar_usuario();
         return;
     }
@@ -382,11 +379,9 @@ void cadastrar_animal(void)
 */
 void atender_animal(void) 
 {
-    system(CLEAR);
-
     if (entrada == NULL)
     {
-        printf("Nao ha animal para ser atendido!\n");
+        printf("\nNao ha animal para ser atendido!\n");
         aguardar_usuario();
         return;
     }
@@ -396,13 +391,13 @@ void atender_animal(void)
 
     if (!adicionar_em_array(animal))
     {
-        printf("Nao eh possivel atender mais animais ao mesmo tempo!\n");
+        printf("\nNao eh possivel atender mais animais ao mesmo tempo!\n");
         aguardar_usuario();
         return;
     }
     desenfileirar(&entrada);
 
-    printf("Atendendo seguinte animal:\n");
+    printf("\nAtendendo seguinte animal:\n");
     printar_animal(animal);
     aguardar_usuario();
 }
@@ -418,10 +413,9 @@ void atender_animal(void)
 */
 void alterar_status_servico(void) 
 {
-    system(CLEAR);
     int id, posicao;
 
-    printf("Digite o id do animal que voce deseja alterar o status respectivo do servico:\n");
+    printf("\nDigite o id do animal que voce deseja alterar o status respectivo do servico:\n");
     scanf("%d", &id);
     getchar();
 
@@ -436,7 +430,7 @@ void alterar_status_servico(void)
     posicao = buscar_em_array(id);
     if (posicao == -1) // verificar se id está na array
     {
-        printf("Servico em andamento nao encontrado!\n");
+        printf("\nServico em andamento nao encontrado!\n");
         aguardar_usuario();
         return;
     }
@@ -446,13 +440,13 @@ void alterar_status_servico(void)
 
     if (!enfileirar(animal, &saida))
     {
-        printf("Nao foi possivel adicionar o animal na fila de saida!\n");
+        printf("\nNao foi possivel adicionar o animal na fila de saida!\n");
         aguardar_usuario();
         return;
     } 
     remover_de_array(id);
 
-    printf("Finalizando servico:\n");
+    printf("\nFinalizando servico:\n");
     printar_animal(animal);
     aguardar_usuario();
 }
@@ -464,10 +458,9 @@ void alterar_status_servico(void)
  * array de serviços em andamento, dependendo do status recebido.
 */
 void cancelar_servico(void) {
-    system(CLEAR);
     int id, status_atual;
 
-    printf("Digite o id do animal:\n");
+    printf("\nDigite o id do animal:\n");
     scanf("%d", &id);
     getchar();
 
@@ -479,7 +472,7 @@ void cancelar_servico(void) {
         getchar();
     }
 
-    printf("Digite o status atual do servico:\n1 - Aguardando\n2 - Em andamento\n");
+    printf("\nDigite o status atual do servico:\n1 - Aguardando\n2 - Em andamento\n");
     scanf("%d", &status_atual);
     getchar();
 
@@ -495,7 +488,7 @@ void cancelar_servico(void) {
     {
         if (!remover_de_fila(&entrada, id)) 
         {
-            printf("Animal nao encontrado aguardando!\n");
+            printf("\nAnimal nao encontrado aguardando!\n");
             aguardar_usuario();
             return;
         }
@@ -504,13 +497,13 @@ void cancelar_servico(void) {
     {
         if (!remover_de_array(id)) 
         {
-            printf("Servico em andamento nao encontrado!\n");
+            printf("\nServico em andamento nao encontrado!\n");
             aguardar_usuario();
             return;
         }
     }
 
-    printf("Servico cancelado com sucesso!\n");
+    printf("\nServico cancelado com sucesso!\n");
     aguardar_usuario();
 }
 
@@ -521,10 +514,9 @@ void cancelar_servico(void) {
 */
 void entregar_animal(void) 
 {
-    system(CLEAR);
     if (saida == NULL) 
     {
-        printf("Nao ha animais para serem entregues!\n");
+        printf("\nNao ha animais para serem entregues!\n");
         aguardar_usuario();
         return;
     }
@@ -532,7 +524,7 @@ void entregar_animal(void)
     Animal animal = saida->animal;
     desenfileirar(&saida);
 
-    printf("Entregando seguinte animal:\n");
+    printf("\nEntregando seguinte animal:\n");
     printar_animal(animal);
     aguardar_usuario();
 }
@@ -579,16 +571,13 @@ int main(void)
     do 
     {
         mostrar_menu();
-
         scanf("%d", &opcao);
         getchar();
 
         if (opcao == 0)
         {
-            system(CLEAR);
-            printf("Saindo...\n");
+            printf("\nSaindo...\n");
             aguardar_usuario();
-            system(CLEAR);
             break;
         }
 
@@ -610,20 +599,18 @@ int main(void)
                 entregar_animal();
                 break;
             case 6:
-                system(CLEAR);
-                printf(">>> Fila de entrada <<<\n\n");
+                printf("\n>>> Fila de entrada <<<\n\n");
                 printar_fila(&entrada);
                 break;
             case 7:
                 printar_array();
                 break;
             case 8:
-                system(CLEAR);
-                printf(">>> Fila de saida <<<\n\n");
+                printf("\n>>> Fila de saida <<<\n\n");
                 printar_fila(&saida);
                 break;
             default:
-                printf("Opção invalida!\n");
+                printf("\nOpcao invalida!\n\n");
                 aguardar_usuario();
                 break;
         }
