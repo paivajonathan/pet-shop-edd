@@ -627,7 +627,7 @@ int main(void)
                 aguardar_usuario();
                 break;
         }
-        opcao = -1;
+        opcao = -1; // reseta opção, para evitar loop infinito com entrada inválida.
     } while (opcao != 0);
 
     limpar_fila(&entrada);
