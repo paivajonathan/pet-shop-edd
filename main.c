@@ -56,7 +56,7 @@ void mostrar_menu(void)
     printf("Digite a opcao desejada:\n");
     printf("1 - Cadastrar animal\n");
     printf("2 - Atender animal\n");
-    printf("3 - Alterar status de servico\n");
+    printf("3 - Alterar status de servico em andamento\n");
     printf("4 - Cancelar servico\n");
     printf("5 - Entregar animal\n");
     printf("6 - Imprimir fila de entrada\n");
