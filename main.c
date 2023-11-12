@@ -83,11 +83,11 @@ Animal receber_dados(void)
     scanf("%[^\n]s", animal.nome);
     getchar();
 
-    printf("Digite o nome do tutor do animal:\n");
+    printf("\nDigite o nome do tutor do animal:\n");
     scanf("%[^\n]s", animal.tutor);
     getchar();
 
-    printf("Digite a especie do animal:\n1 - Cachorro\n2 - Gato\n3 - Outro\n");
+    printf("\nDigite a especie do animal:\n1 - Cachorro\n2 - Gato\n3 - Outro\n");
     scanf("%d", &animal.especie);
     getchar();
 
@@ -99,7 +99,7 @@ Animal receber_dados(void)
         getchar();
     }
 
-    printf("Digite o serviço desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
+    printf("\nDigite o serviço desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
     scanf("%d", &animal.servico);
     getchar();
 
@@ -409,14 +409,14 @@ void alterar_status_servico(void)
 {
     int id, posicao;
 
-    printf("\nDigite o id do animal que voce deseja alterar o status respectivo do servico:\n");
+    printf("\nDigite o id do animal para alterar o status do servico:\n");
     scanf("%d", &id);
     getchar();
 
     while (id < MINIMO_ID || id > contador_id) // validar id
     {
         printf("\nId invalido!\n");
-        printf("Digite o id do animal que voce deseja alterar o status do respectivo servico:\n");
+        printf("nDigite o id do animal para alterar o status do servico:\n");
         scanf("%d", &id);
         getchar();
     }
