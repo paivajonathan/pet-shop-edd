@@ -425,7 +425,7 @@ void alterar_status_servico(void)
     while (id < MINIMO_ID || id > contador_id) // validar id
     {
         printf("\nId invalido!\n");
-        printf("nDigite o id do animal para alterar o status do servico:\n");
+        printf("Digite o id do animal para alterar o status do servico:\n");
         scanf("%d", &id);
         limpar_buffer();
     }
