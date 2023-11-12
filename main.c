@@ -3,9 +3,9 @@
 #include <string.h>
 
 #ifdef _WIN32
-    #define CLEAR "cls"
+#define CLEAR "cls"
 #else
-    #define CLEAR "clear"
+#define CLEAR "clear"
 #endif
 
 #define AGUARDANDO 1
@@ -375,10 +375,10 @@ void cadastrar_animal(void)
 /**
  * @brief Atende um animal da fila de entrada, alterando seu status para "em andamento".
  * 
- * Copia os dados do primeiro animal da fila de entrada, para adicioná-lo na
- * array de serviços em andamento, e então remove o primeiro da fila de entrada.
- * O processo ocorre nessa ordem, para evitar que os dados do animal sejam perdidos,
- * caso ocorra algum erro.
+ * Copia os dados do primeiro animal da fila de entrada, alterando seu status para
+ * em andamento, para adicioná-lo na array de serviços em andamento,
+ * e então remove o primeiro da fila de entrada. O processo ocorre nessa ordem,
+ * para evitar que os dados do animal sejam perdidos, caso ocorra algum erro.
 */
 void atender_animal(void) 
 {
@@ -421,14 +421,14 @@ void alterar_status_servico(void)
     system(CLEAR);
     int id, posicao;
 
-    printf("Digite o id do animal que voce deseja alterar o status:\n");
+    printf("Digite o id do animal que voce deseja alterar o status respectivo do servico:\n");
     scanf("%d", &id);
     getchar();
 
     while (id < MINIMO_ID || id > contador_id) // validar id
     {
         printf("\nId invalido!\n");
-        printf("Digite o id do animal que voce deseja alterar o status:\n");
+        printf("Digite o id do animal que voce deseja alterar o status do respectivo servico:\n");
         scanf("%d", &id);
         getchar();
     }
@@ -583,7 +583,16 @@ int main(void)
         scanf("%d", &opcao);
         getchar();
 
-        switch (opcao) 
+        if (opcao == 0)
+        {
+            system(CLEAR);
+            printf("Saindo...\n");
+            aguardar_usuario();
+            system(CLEAR);
+            break;
+        }
+
+        switch (opcao)
         {
             case 1:
                 cadastrar_animal();
@@ -613,16 +622,12 @@ int main(void)
                 printf(">>> Fila de saida <<<\n\n");
                 printar_fila(&saida);
                 break;
-            case 0:
-                system(CLEAR);
-                printf("Saindo...\n");
-                aguardar_usuario();
-                system(CLEAR);
-                break;
             default:
                 printf("Opção invalida!\n");
+                aguardar_usuario();
                 break;
         }
+        opcao = -1;
     } while (opcao != 0);
 
     limpar_fila(&entrada);
