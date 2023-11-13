@@ -347,6 +347,8 @@ int adicionar_em_array(Animal animal)
 {
     if (quantidade_andamento == MAXIMO_ANDAMENTO) return 0;
 
+    /* Adiciona o animal na última posição válida da array
+    e incrementa o contador. */
     servicos_andamento[quantidade_andamento++] = animal;
     return 1;
 }
