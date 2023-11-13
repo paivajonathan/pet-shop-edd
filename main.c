@@ -139,12 +139,17 @@ Animal receber_dados(void)
 */
 void printar_animal(Animal animal) 
 {
+    // Arrays para mapear IDs para strings
+    const char* especies[] = {"Desconhecida", "Cachorro", "Gato", "Outro"};
+    const char* servicos[] = {"Desconhecido", "Banho", "Tosa", "Ambos"};
+    const char* status[] = {"Desconhecido", "Aguardando", "Em Andamento", "Finalizado"};
+    
     printf("Id: %d\n", animal.id);
     printf("Nome: %s\n", animal.nome);
     printf("Tutor: %s\n", animal.tutor);
-    printf("Especie: %d\n", animal.especie);
-    printf("Servico: %d\n", animal.servico);
-    printf("Status: %d\n\n", animal.status);
+    printf("Especie: %d - %s\n", animal.especie, especies[animal.especie]);
+    printf("Servico: %d - %s\n", animal.servico, servicos[animal.servico]);
+    printf("Status: %d - %s\n\n", animal.status, status[animal.status]);
 }
 
 /**
