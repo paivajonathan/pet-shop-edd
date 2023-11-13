@@ -14,19 +14,22 @@
 #define TOSA 2
 #define BANHO_TOSA 3
 
-#define MAXIMO_ANDAMENTO 3
 #define MINIMO_ID 1
+#define MAXIMO_ANDAMENTO 3
 
 typedef struct Animal {
     int id; // identificador único
-    char nome[51];
-    char tutor[51];
+    char nome[51]; // 1 caractere a mais para comportar o '\0' no final da string.
+    char tutor[51]; // 1 caractere a mais para comportar o '\0' no final da string.
     int especie; // Cachorro (1), Gato (2), Outro (3)
     int servico; // Banho (1), Tosa (2), Ambos (3)
     int status; // Aguardando (1), Andamento (2), Finalizado (3)
 } Animal;
 
-typedef struct Fila { // estrutura genérica de fila
+/**
+ * Estrutura de fila, que armazena os dados de um animal e um ponteiro para o próximo elemento.
+*/
+typedef struct Fila {
     Animal animal;
     struct Fila* prox;
 } Fila;
@@ -49,7 +52,11 @@ void aguardar_usuario(void)
 }
 
 /**
- * Limpa o buffer do teclado.
+ * @brief Limpa o buffer do teclado.
+ * Consome todos os caracteres, até encontrar uma quebra de linha ou o fim do arquivo.
+ * Necessário pois quando a entrada do usuário não correspondente
+ * ao formato esperado pela função scanf, os caracteres inválidos
+ * permanecem no buffer do stdin, gerando comportamentos inesperados.
 */
 void limpar_buffer(void)
 {
@@ -65,7 +72,7 @@ void mostrar_menu(void)
     printf("Digite a opcao desejada:\n");
     printf("1 - Cadastrar animal\n");
     printf("2 - Atender animal\n");
-    printf("3 - Alterar status de servico em andamento\n");
+    printf("3 - Finalizar servico\n");
     printf("4 - Cancelar servico\n");
     printf("5 - Entregar animal\n");
     printf("6 - Imprimir fila de entrada\n");
@@ -108,14 +115,14 @@ Animal receber_dados(void)
         limpar_buffer();
     }
 
-    printf("\nDigite o serviço desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
+    printf("\nDigite o servico desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
     scanf("%d", &animal.servico);
     limpar_buffer();
 
     while(animal.servico < BANHO || animal.servico > BANHO_TOSA) 
     {
         printf("\nServiço invalido!\n");
-        printf("Digite o serviço desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
+        printf("Digite o servico desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
         scanf("%d", &animal.servico);
         limpar_buffer();
     }
@@ -199,6 +206,12 @@ void desenfileirar(Fila** fila)
     aux = NULL;
 }
 
+/**
+ * Busca um elemento na fila com base no id do animal.
+ * @param fila qual das filas será realizada a busca.
+ * @param id identificador do animal.
+ * @return elemento encontrado, NULL caso contrário.
+*/
 Fila* buscar_item_fila(Fila** fila, int id) 
 {
     if (*fila == NULL) return NULL;
@@ -417,18 +430,18 @@ void atender_animal(void)
  * O processo ocorre nessa ordem, para evitar que os dados do animal sejam perdidos,
  * caso ocorra algum erro.
 */
-void alterar_status_servico(void) 
+void finalizar_servico(void) 
 {
     int id, posicao;
 
-    printf("\nDigite o id do animal para alterar o status do servico:\n");
+    printf("\nDigite o id do animal cujo servico deseja finalizar:\n");
     scanf("%d", &id);
     limpar_buffer();
 
     while (id < MINIMO_ID || id > contador_id - 1) // validar id
     {
         printf("\nId invalido!\n");
-        printf("Digite o id do animal para alterar o status do servico:\n");
+        printf("Digite o id do animal cujo servico deseja finalizar:\n");
         scanf("%d", &id);
         limpar_buffer();
     }
@@ -571,7 +584,7 @@ int main(void)
                 atender_animal();
                 break;
             case 3:
-                alterar_status_servico();
+                finalizar_servico();
                 break;
             case 4:
                 cancelar_servico();
