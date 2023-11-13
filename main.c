@@ -43,15 +43,6 @@ int contador_id = MINIMO_ID;
 /* ==================== COMEÇO FUNÇÕES UTILITÁRIAS ==================== */
 
 /**
- * Aguarda a confirmação do usuário para continuar o programa.
-*/
-void aguardar_usuario(void) 
-{
-    printf("Pressione ENTER para continuar...\n");
-    getchar();
-}
-
-/**
  * @brief Limpa o buffer do teclado.
  * Consome todos os caracteres, até encontrar uma quebra de linha ou o fim do arquivo.
  * Necessário pois quando a entrada do usuário não correspondente
@@ -62,6 +53,15 @@ void limpar_buffer(void)
 {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
+}
+
+/**
+ * Aguarda a confirmação do usuário para continuar o programa.
+*/
+void aguardar_usuario(void) 
+{
+    printf("Pressione ENTER para continuar...\n");
+    limpar_buffer();
 }
 
 /**
@@ -445,7 +445,7 @@ void finalizar_servico(void)
     scanf("%d", &id);
     limpar_buffer();
 
-    while (id < MINIMO_ID || id > contador_id - 1) // validar id
+    while (id < MINIMO_ID) // validar id
     {
         printf("\nId invalido!\n");
         printf("Digite o id do animal cujo servico deseja finalizar:\n");
@@ -503,7 +503,7 @@ void cancelar_servico(void) {
     scanf("%d", &id);
     limpar_buffer();
 
-    while (id < MINIMO_ID || id > contador_id - 1) // caso o id seja inválido
+    while (id < MINIMO_ID) // caso o id seja inválido
     {
         printf("\nId invalido!\n");
         printf("Digite o id do animal:\n");
