@@ -539,6 +539,12 @@ void cancelar_servico(void) {
         animal = servicos_andamento[posicao];
         remover_de_array(posicao);
     }
+    else
+    {
+        printf("\nStatus invalido!\n");
+        aguardar_usuario();
+        return;
+    }
 
     printf("\nServico cancelado com sucesso!\n");
     printar_animal(animal);
