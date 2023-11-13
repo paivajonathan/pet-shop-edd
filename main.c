@@ -355,7 +355,7 @@ int adicionar_em_array(Animal animal)
 
 /**
  * Remove um animal da array de serviços em andamento.
- * @param posicao posição do animal na array de serviços em andamento.
+ * @param posicao posição do animal na array de serviços em andamento. Valores: 0, 1, 2.
 */
 void remover_de_array(int posicao) 
 {
