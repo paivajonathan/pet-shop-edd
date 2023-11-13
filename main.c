@@ -44,6 +44,7 @@ int contador_id = MINIMO_ID;
 
 /**
  * @brief Limpa o buffer do teclado.
+ * 
  * Consome todos os caracteres, até encontrar uma quebra de linha ou o fim do arquivo.
  * Necessário pois quando a entrada do usuário não correspondente
  * ao formato esperado pela função scanf, os caracteres inválidos
@@ -56,7 +57,9 @@ void limpar_buffer(void)
 }
 
 /**
- * Aguarda a confirmação do usuário para continuar o programa.
+ * @brief Aguarda a confirmação do usuário para continuar o programa.
+ * 
+ * Utiliza a função limpar_buffer() para caso o usuário digite algo além de ENTER.
 */
 void aguardar_usuario(void) 
 {
@@ -107,7 +110,7 @@ Animal receber_dados(void)
     scanf("%d", &animal.especie);
     limpar_buffer();
 
-    while (animal.especie < CACHORRO || animal.especie > OUTRO_ANIMAL) 
+    while (animal.especie < CACHORRO || animal.especie > OUTRO_ANIMAL) // validar espécie
     {
         printf("\nEspecie invalida!\n");
         printf("Digite a especie do animal:\n1 - Cachorro\n2 - Gato\n3 - Outro\n");
@@ -119,7 +122,7 @@ Animal receber_dados(void)
     scanf("%d", &animal.servico);
     limpar_buffer();
 
-    while(animal.servico < BANHO || animal.servico > BANHO_TOSA) 
+    while(animal.servico < BANHO || animal.servico > BANHO_TOSA) // validar serviço
     {
         printf("\nServico invalido!\n");
         printf("Digite o servico desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
@@ -624,6 +627,7 @@ int main(void)
                 aguardar_usuario();
                 break;
         }
+
         opcao = -1; // reseta opção, para evitar loop infinito com entrada inválida.
     } while (opcao != 0);
 
