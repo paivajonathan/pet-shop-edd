@@ -121,7 +121,7 @@ Animal receber_dados(void)
 
     while(animal.servico < BANHO || animal.servico > BANHO_TOSA) 
     {
-        printf("\nServiço invalido!\n");
+        printf("\nServico invalido!\n");
         printf("Digite o servico desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
         scanf("%d", &animal.servico);
         limpar_buffer();
@@ -350,7 +350,7 @@ int buscar_em_array(int id)
 */
 int adicionar_em_array(Animal animal) 
 {
-    if (quantidade_andamento == MAXIMO_ANDAMENTO) return 0;
+    if (quantidade_andamento == MAXIMO_ANDAMENTO) return 0; // se a array estiver "cheia"
 
     /* Adiciona o animal na última posição válida da array
     e incrementa o contador. */
@@ -378,7 +378,10 @@ void remover_de_array(int posicao)
 /* ==================== COMEÇO DAS FUNÇÕES DO PETSHOP ==================== */
 
 /**
- * Cadastra um novo animal na fila de entrada, com base nos dados recebidos, caso possível.
+ * @brief Cadastra um novo animal, com base nos dados recebidos.
+ * 
+ * É criada uma nova struct de Animal, com os dados recebidos,
+ * e então adicionada na fila de entrada.
 */
 void cadastrar_animal(void) 
 {
@@ -398,9 +401,9 @@ void cadastrar_animal(void)
 /**
  * @brief Atende um animal da fila de entrada, alterando seu status para "em andamento".
  * 
- * Copia os dados do primeiro animal da fila de entrada, alterando seu status para
- * em andamento, para adicioná-lo na array de serviços em andamento,
- * e então remove o primeiro da fila de entrada. O processo ocorre nessa ordem,
+ * Copia os dados do primeiro animal da fila de entrada em uma nova struct,
+ * alterando seu status para "em andamento". Em seguida, a adiciona na array de serviços
+ * em andamento e remove o primeiro da fila de entrada. O processo ocorre nessa ordem,
  * para evitar que os dados do animal sejam perdidos, caso ocorra algum erro.
 */
 void atender_animal(void) 
@@ -429,12 +432,12 @@ void atender_animal(void)
 }
 
 /**
- * @brief Altera o status de um animal da array de serviços em andamento para "finalizado".
+ * @brief Finaliza um serviço vinculado a um animal.
  * 
  * Busca o animal na array de serviços em andamento, com base no id recebido do usuário,
  * e então copia seus dados para uma nova estrutura, alterando seu status para "finalizado".
- * Em seguida, adiciona essa estrutura na fila de saída, e remove o animal da array de serviços em andamento.
- * O processo ocorre nessa ordem, para evitar que os dados do animal sejam perdidos,
+ * Em seguida, adiciona essa estrutura na fila de saída, e remove o animal da array de serviços
+ * em andamento. O processo ocorre nessa ordem, para evitar que os dados do animal sejam perdidos,
  * caso ocorra algum erro.
 */
 void finalizar_servico(void) 
@@ -478,10 +481,11 @@ void finalizar_servico(void)
 }
 
 /**
- * @brief Cancela um serviço, removendo o animal da fila de entrada ou da array de serviços em andamento.
+ * @brief Cancela um serviço vinculado a um animal.
  * 
- * Recebe o id do animal e o status atual do serviço, para então remover o animal da fila de entrada ou da
- * array de serviços em andamento, dependendo do status recebido.
+ * Recebe o id do animal e o status atual do serviço, para, então, remover
+ * o animal da fila de entrada ou da array de serviços em andamento,
+ * dependendo do status recebido.
 */
 void cancelar_servico(void) {
     int id, status_atual;
@@ -542,7 +546,7 @@ void cancelar_servico(void) {
 }
 
 /**
- * @brief Entrega o animal para o tutor, removendo-o da fila de saída.
+ * @brief Entrega o animal para o tutor, seguindo a ordem da fila.
  * 
  * Remove o primeiro animal da fila de saída, exibindo seus dados no console.
 */
