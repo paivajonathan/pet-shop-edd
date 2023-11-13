@@ -573,7 +573,6 @@ int main(void)
         if (opcao == 0)
         {
             printf("\nSaindo...\n");
-            aguardar_usuario();
             break;
         }
 
