@@ -359,7 +359,8 @@ int adicionar_em_array(Animal animal)
 */
 void remover_de_array(int posicao) 
 {
-    if (quantidade_andamento == 0 || posicao == -1) return;
+    if (quantidade_andamento == 0) return; // se a array estiver "vazia"
+    if (posicao < 0 || posicao >= MAXIMO_ANDAMENTO) return; // posições válidas: 0, 1, 2
 
     quantidade_andamento--;
     for (int i = posicao; i < quantidade_andamento; i++) 
