@@ -99,36 +99,34 @@ Animal receber_dados(void)
     Animal animal;
 
     printf("\nDigite o nome do animal:\n");
-    scanf("%50[^\n]", animal.nome);
+    scanf(" %50[^\n]", animal.nome);
     limpar_buffer();
 
     printf("\nDigite o nome do tutor do animal:\n");
-    scanf("%50[^\n]", animal.tutor);
+    scanf(" %50[^\n]", animal.tutor);
     limpar_buffer();
 
-    printf("\nDigite a especie do animal:\n1 - Cachorro\n2 - Gato\n3 - Outro\n");
-    scanf("%d", &animal.especie);
-    limpar_buffer();
-
-    while (animal.especie < CACHORRO || animal.especie > OUTRO_ANIMAL) // validar espécie
+    do
     {
-        printf("\nEspecie invalida!\n");
-        printf("Digite a especie do animal:\n1 - Cachorro\n2 - Gato\n3 - Outro\n");
+        printf("\nDigite a especie do animal:\n1 - Cachorro\n2 - Gato\n3 - Outro\n");
         scanf("%d", &animal.especie);
         limpar_buffer();
-    }
 
-    printf("\nDigite o servico desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
-    scanf("%d", &animal.servico);
-    limpar_buffer();
+        if (animal.especie < CACHORRO || animal.especie > OUTRO_ANIMAL)
+            printf("\nEspecie invalida!\n");
 
-    while(animal.servico < BANHO || animal.servico > BANHO_TOSA) // validar serviço
+    } while (animal.especie < CACHORRO || animal.especie > OUTRO_ANIMAL);
+
+    do
     {
-        printf("\nServico invalido!\n");
-        printf("Digite o servico desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
+        printf("\nDigite o servico desejado:\n1 - Banho\n2 - Tosa\n3 - Ambos\n");
         scanf("%d", &animal.servico);
         limpar_buffer();
-    }
+
+        if (animal.servico < BANHO || animal.servico > BANHO_TOSA)
+            printf("\nServico invalido!\n");
+
+    } while (animal.servico < BANHO || animal.servico > BANHO_TOSA);
 
     animal.id = contador_id++; // atribui o id e incrementa o contador
     animal.status = AGUARDANDO;
@@ -445,19 +443,17 @@ void atender_animal(void)
 */
 void finalizar_servico(void) 
 {
-    int id, posicao;
-
-    printf("\nDigite o id do animal cujo servico deseja finalizar:\n");
-    scanf("%d", &id);
-    limpar_buffer();
-
-    while (id < MINIMO_ID) // validar id
+    int id = 0, posicao = -1; // inicializar com valores, pois antes continham lixo de memória
+    
+    do
     {
-        printf("\nId invalido!\n");
-        printf("Digite o id do animal cujo servico deseja finalizar:\n");
+        printf("\nDigite o id do animal cujo servico deseja finalizar:\n");
         scanf("%d", &id);
         limpar_buffer();
-    }
+
+        if (id < MINIMO_ID) printf("\nId invalido!\n");
+
+    } while (id < MINIMO_ID);
 
     posicao = buscar_em_array(id);
     if (posicao == -1) // verificar se id está na array
@@ -491,32 +487,29 @@ void finalizar_servico(void)
  * dependendo do status recebido.
 */
 void cancelar_servico(void) {
-    int id, status_atual;
+    int id = 0, status_atual = 0; // inicializar com valores, pois antes continham lixo de memória
     Animal animal;
 
-    printf("\nDigite o status atual do servico:\n1 - Aguardando\n2 - Em andamento\n");
-    scanf("%d", &status_atual);
-    limpar_buffer();
-
-    while (status_atual < AGUARDANDO || status_atual > ANDAMENTO)  // caso o status seja inválido
+    do
     {
-        printf("\nStatus invalido!\n");
-        printf("Digite o status atual do servico:\n1 - Aguardando\n2 - Em andamento\n");
+        printf("\nDigite o status atual do servico:\n1 - Aguardando\n2 - Em andamento\n");
         scanf("%d", &status_atual);
         limpar_buffer();
-    }
 
-    printf("\nDigite o id do animal:\n");
-    scanf("%d", &id);
-    limpar_buffer();
+        if (status_atual < AGUARDANDO || status_atual > ANDAMENTO)
+            printf("\nStatus invalido!\n");
 
-    while (id < MINIMO_ID) // caso o id seja inválido
+    } while (status_atual < AGUARDANDO || status_atual > ANDAMENTO);
+
+    do
     {
-        printf("\nId invalido!\n");
-        printf("Digite o id do animal:\n");
+        printf("\nDigite o id do animal:\n");
         scanf("%d", &id);
         limpar_buffer();
-    }
+
+        if (id < MINIMO_ID) printf("\nId invalido!\n");
+
+    } while (id < MINIMO_ID);
 
     if (status_atual == AGUARDANDO) // caso o serviço esteja na fila de entrada
     {
